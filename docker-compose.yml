@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  db:
+    container_name: permission-service-db
+    image: postgres:latest
+    ports:
+      - "5433:5432"  # Usa el puerto 5433
+    environment:
+      POSTGRES_USER: sa
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: permission-service-db
+    volumes:
+      - ./data:/var/lib/postgresql/data
