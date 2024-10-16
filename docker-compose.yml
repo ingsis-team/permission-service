@@ -1,14 +1,37 @@
-version: '3.8'
-
 services:
-  db:
-    container_name: permission-service-db
-    image: postgres:latest
+  api:
+    container_name: "permission-api"
+    build:
+      context: .
     ports:
-      - "5433:5432"  # Usa el puerto 5433
+      - "8081:8080"
     environment:
-      POSTGRES_USER: sa
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: permission-service-db
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      DB_HOST: "postgres"
+      DB_PORT: 5432
+    networks:
+      - ingsis-network
+    depends_on:
+      - db
+
+  db:
+    container_name: "permission_db"
+    image: postgres:alpine
+    ports:
+      - "5431:5432"
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      JAVA_OPTS: -javaagent:/usr/local/newrelic/newrelic.jar
     volumes:
-      - ./data:/var/lib/postgresql/data
+      - permission_db:/var/lib/postgresql/data
+    networks:
+      - ingsis-network
+
+volumes:
+  permission_db:
+
+networks:
+  ingsis-network:
+    external: true
