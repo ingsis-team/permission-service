@@ -1,4 +1,4 @@
-package resource
+package permission.resource
 
 class ResourceUser(
     val userId: String,

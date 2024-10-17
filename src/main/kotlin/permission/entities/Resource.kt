@@ -5,7 +5,7 @@ package permission.entities
 import jakarta.persistence.*
 import lombok.NoArgsConstructor
 import lombok.Setter
-import resource.AddResource
+import permission.resource.AddResource
 import java.util.UUID
 
 @Entity

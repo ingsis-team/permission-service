@@ -1,4 +1,4 @@
-package resource
+package permission.resource
 
 import permission.entities.Permission
 
