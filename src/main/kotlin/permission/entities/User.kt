@@ -12,5 +12,5 @@ class User(
     val id: String = UUID.randomUUID().toString(),
     @ManyToMany(mappedBy = "users")
     @JsonIgnore
-    val resources: MutableList<Resources> = mutableListOf(),
+    val resources: MutableList<Resource> = mutableListOf(),
 )
