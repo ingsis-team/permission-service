@@ -3,6 +3,9 @@ package permission.services
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
+import permission.dto.AddResource
+import permission.dto.ResourceUser
+import permission.dto.ResourceUserPermission
 import permission.entities.Permission
 import permission.entities.Resource
 import permission.exceptions.PermissionException
@@ -10,9 +13,6 @@ import permission.exceptions.ResourceNotFoundException
 import permission.exceptions.UnauthorizedDeleteException
 import permission.exceptions.UnauthorizedShareException
 import permission.repositories.ResourceRepository
-import permission.resource.AddResource
-import permission.resource.ResourceUser
-import permission.resource.ResourceUserPermission
 
 @Service
 class DefaultResourceService(

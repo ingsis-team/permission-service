@@ -1,9 +1,9 @@
 package permission.services
 
+import permission.dto.AddResource
+import permission.dto.ResourceUser
+import permission.dto.ResourceUserPermission
 import permission.entities.Permission
-import permission.resource.AddResource
-import permission.resource.ResourceUser
-import permission.resource.ResourceUserPermission
 
 interface ResourceService {
     fun addResource(addResource: AddResource): ResourceUserPermission

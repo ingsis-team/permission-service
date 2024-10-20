@@ -8,10 +8,11 @@ services:
     environment:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "postgres"
-      DB_HOST: "postgres"
+      POSTGRES_DB: "permission_db"
+      DB_HOST: "db"
       DB_PORT: 5432
     networks:
-      - ingsis-network
+      - permission_network
     depends_on:
       - db
 
@@ -23,15 +24,15 @@ services:
     environment:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "postgres"
-      JAVA_OPTS: -javaagent:/usr/local/newrelic/newrelic.jar
+      POSTGRES_DB: "permission_db"
     volumes:
       - permission_db:/var/lib/postgresql/data
     networks:
-      - ingsis-network
+      - permission_network
 
 volumes:
   permission_db:
 
 networks:
-  ingsis-network:
+  permission_network:
     external: true

@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.context.request.WebRequest
+import permission.dto.AddResource
+import permission.dto.ResourceUser
+import permission.dto.ResourceUserPermission
+import permission.dto.ShareResource
 import permission.exceptions.PermissionException
-import permission.resource.AddResource
-import permission.resource.ResourceUser
-import permission.resource.ResourceUserPermission
-import permission.resource.ShareResource
 import permission.services.ResourceService
 
 @RestController()
