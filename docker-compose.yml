@@ -8,11 +8,10 @@ services:
     environment:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "postgres"
-      POSTGRES_DB: "permission_db"
-      DB_HOST: "db"
+      DB_HOST: "postgres"
       DB_PORT: 5432
     networks:
-      - permission_network
+      - permission-network
     depends_on:
       - db
 
@@ -24,15 +23,14 @@ services:
     environment:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "postgres"
-      POSTGRES_DB: "permission_db"
     volumes:
       - permission_db:/var/lib/postgresql/data
     networks:
-      - permission_network
+      - permission-network
 
 volumes:
   permission_db:
 
 networks:
-  permission_network:
+  permission-network:
     external: true
