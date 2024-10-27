@@ -2,7 +2,6 @@ package permission
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.runApplication
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
@@ -14,7 +13,7 @@ import org.springframework.web.client.RestTemplate
 
 @RestController
 @SpringBootApplication
-class PermissionServerApplication(
+class PermissionApplication(
     @Autowired val template: RestTemplate,
 ) {
     @GetMapping("/")
@@ -43,8 +42,4 @@ class PermissionServerApplication(
     fun needsAuth(): String {
         return "Great! you are authenticated"
     }
-}
-
-fun main(args: Array<String>) {
-    runApplication<PermissionServerApplication>(*args)
 }

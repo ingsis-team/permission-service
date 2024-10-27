@@ -27,8 +27,6 @@ services:
       POSTGRES_DB: "permission_db"
     volumes:
       - permission_db:/var/lib/postgresql/data
-    networks:
-      - permission_network
 
 volumes:
   permission_db:
