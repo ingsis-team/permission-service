@@ -38,12 +38,6 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok:1.18.20")
 }
 
-kotlin {
-	compilerOptions {
-		freeCompilerArgs.addAll '-Xjsr305=strict'
-	}
-}
-
 tasks.named('test') {
 	useJUnitPlatform()
 }
