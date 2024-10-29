@@ -1,4 +1,4 @@
-FROM gradle:8.7.0-jdk17
+FROM gradle:8.10.0-jdk-21-and-22
 
 # Install PostgreSQL client
 USER root
