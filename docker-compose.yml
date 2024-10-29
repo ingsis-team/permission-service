@@ -3,34 +3,29 @@ services:
     container_name: "permission-api"
     build:
       context: .
+      dockerfile: Dockerfile
     ports:
       - "8081:8080"
     environment:
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "postgres"
-      POSTGRES_DB: "permission_db"
-      DB_HOST: "db"
-      DB_PORT: 5432
-    networks:
-      - permission_network
+      DB_USER: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_NAME: ${POSTGRES_DB}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
     depends_on:
       - db
 
   db:
-    container_name: "permission_db"
-    image: postgres:alpine
+    container_name: "permission-db"
+    image: postgres:12
     ports:
-      - "5431:5432"
+      - 5431:5432
     environment:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "postgres"
-      POSTGRES_DB: "permission_db"
+      POSTGRES_DB: "permission-db"
     volumes:
-      - permission_db:/var/lib/postgresql/data
+      - permission-db:/var/lib/postgresql/data
 
 volumes:
-  permission_db:
-
-networks:
-  permission_network:
-    external: true
+  permission-db:
