@@ -24,6 +24,7 @@ services:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "postgres"
       POSTGRES_DB: "permission-db"
+      JAVA_OPTS: -javaagent:/usr/local/newrelic-java/newrelic/newrelic.jar
     volumes:
       - permission-db:/var/lib/postgresql/data
 
