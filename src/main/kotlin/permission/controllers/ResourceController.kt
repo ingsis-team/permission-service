@@ -43,7 +43,7 @@ class ResourceController(
         @RequestBody addResource: AddResource,
     ): ResponseEntity<ResourceUserPermission> {
         val correlationId = MDC.get(CorrelationIdFilter.CORRELATION_ID_KEY)
-        val result = service.addResource(addResource, correlationId)
+        val result = service.addResource(addResource)
         return ResponseEntity.ok(result)
     }
 
