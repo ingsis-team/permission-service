@@ -1,5 +1,6 @@
 package permission.controllers
 
+import org.slf4j.MDC
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -19,6 +20,7 @@ import permission.dto.ResourceUser
 import permission.dto.ResourceUserPermission
 import permission.dto.ShareResource
 import permission.exceptions.PermissionException
+import permission.server.CorrelationIdFilter
 import permission.services.ResourceService
 
 @RestController()
@@ -39,7 +41,11 @@ class ResourceController(
     @PostMapping("/create-resource")
     fun addResource(
         @RequestBody addResource: AddResource,
-    ): ResponseEntity<ResourceUserPermission> = ResponseEntity(service.addResource(addResource), HttpStatus.CREATED)
+    ): ResponseEntity<ResourceUserPermission> {
+        val correlationId = MDC.get(CorrelationIdFilter.CORRELATION_ID_KEY)
+        val result = service.addResource(addResource, correlationId)
+        return ResponseEntity.ok(result)
+    }
 
     @GetMapping("/all-by-userId")
     fun getPermissionsForUser(

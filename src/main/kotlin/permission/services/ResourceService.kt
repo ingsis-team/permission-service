@@ -6,7 +6,10 @@ import permission.dto.ResourceUserPermission
 import permission.entities.Permission
 
 interface ResourceService {
-    fun addResource(addResource: AddResource): ResourceUserPermission
+    fun addResource(
+        addResource: AddResource,
+        correlationId: String,
+    ): ResourceUserPermission
 
     fun findUserResources(id: String): List<ResourceUserPermission>
 
