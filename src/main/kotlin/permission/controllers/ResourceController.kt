@@ -20,7 +20,7 @@ import permission.dto.ResourceUser
 import permission.dto.ResourceUserPermission
 import permission.dto.ShareResource
 import permission.exceptions.PermissionException
-import permission.server.CorrelationIdFilter
+import permission.filters.CorrelationIdFilter
 import permission.services.ResourceService
 
 @RestController()
