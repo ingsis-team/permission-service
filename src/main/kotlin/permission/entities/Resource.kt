@@ -5,14 +5,14 @@ package permission.entities
 import jakarta.persistence.*
 import lombok.NoArgsConstructor
 import lombok.Setter
-import permission.dto.AddResource
+import permission.dto.ResourcePermissionCreateDTO
 import java.util.UUID
 
 @Entity
 @NoArgsConstructor
 @Setter
 class Resource(
-    val resourceId: String,
+    val outsideResourceId: String,
     @ManyToMany
     @JoinTable(
         name = "resource_user",
@@ -26,14 +26,14 @@ class Resource(
     @Id
     val id: String = UUID.randomUUID().toString()
 
-    constructor(resource: AddResource) : this(
-        resourceId = resource.resourceId,
+    constructor(resource: ResourcePermissionCreateDTO) : this(
+        outsideResourceId = resource.resourceId,
         users = mutableListOf(User(resource.userId)),
         permissions = resource.permissions.toMutableSet(),
     ) {}
 
     constructor() : this(
-        resourceId = "",
+        outsideResourceId = "",
         users = mutableListOf(),
         permissions = mutableSetOf(),
     ) {}

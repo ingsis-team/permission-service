@@ -3,9 +3,9 @@ package permission.services
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
-import permission.dto.AddResource
+import permission.dto.PermissionResponse
+import permission.dto.ResourcePermissionCreateDTO
 import permission.dto.ResourceUser
-import permission.dto.ResourceUserPermission
 import permission.entities.Permission
 import permission.entities.Resource
 import permission.exceptions.PermissionException
@@ -21,15 +21,15 @@ class DefaultResourceService(
     @Autowired
     private val userService: UserService,
 ) : ResourceService {
-    override fun addResource(addResource: AddResource): ResourceUserPermission {
-        addResource.permissions.add(Permission.OWNER)
-        return createResource(addResource)
+    override fun addResource(resourcePermissionCreateDTO: ResourcePermissionCreateDTO): PermissionResponse {
+        resourcePermissionCreateDTO.permissions.add(Permission.OWNER)
+        return createResource(resourcePermissionCreateDTO)
     }
 
-    override fun findUserResources(id: String): List<ResourceUserPermission> {
-        val returnableResources = mutableListOf<ResourceUserPermission>()
+    override fun findUserResources(id: String): List<PermissionResponse> {
+        val returnableResources = mutableListOf<PermissionResponse>()
         repository.findAllByUsersId(id).map {
-            returnableResources.add(ResourceUserPermission(it.resourceId, it.permissions))
+            returnableResources.add(PermissionResponse(it.outsideResourceId, it.permissions))
         }
         return returnableResources
     }
@@ -37,7 +37,7 @@ class DefaultResourceService(
     override fun findByUsersIdAndResourceId(
         userId: String,
         resourceId: String,
-    ): ResourceUserPermission {
+    ): PermissionResponse {
         val resource =
             repository
                 .findByResourceIdAndUsersId(resourceId, userId)
@@ -45,7 +45,7 @@ class DefaultResourceService(
         if (resource == null) {
             throw ResourceNotFoundException("The ids provided don't match an existing resource")
         }
-        return ResourceUserPermission(resourceId, resource.permissions)
+        return PermissionResponse(resourceId, resource.permissions)
     }
 
     override fun shareResource(
@@ -53,7 +53,7 @@ class DefaultResourceService(
         otherId: String,
         resourceId: String,
         permissions: MutableList<Permission>,
-    ): AddResource {
+    ): ResourcePermissionCreateDTO {
         if (selfId == otherId) throw UnauthorizedShareException("Not allowed to share it with yourself")
         val resource = findByUsersIdAndResourceId(selfId, resourceId)
         if (!resource.permissions.contains(Permission.OWNER)) {
@@ -61,9 +61,9 @@ class DefaultResourceService(
         }
         val otherResources = findUserResources(otherId).filter { it.resourceId == resourceId }
         if (otherResources.isNotEmpty()) throw UnauthorizedShareException("User already has access to resource")
-        val addResource = AddResource(otherId, resourceId, permissions)
-        createResource(addResource)
-        return addResource
+        val resourcePermissionCreateDTO = ResourcePermissionCreateDTO(otherId, resourceId, permissions)
+        createResource(resourcePermissionCreateDTO)
+        return resourcePermissionCreateDTO
     }
 
     override fun checkCanWrite(
@@ -78,7 +78,7 @@ class DefaultResourceService(
         return ResourceUser(userId, resources[0].permissions.toList())
     }
 
-    override fun getAllWriteableResources(userId: String): List<ResourceUserPermission> =
+    override fun getAllWriteableResources(userId: String): List<PermissionResponse> =
         findUserResources(userId).filter {
             it.permissions.contains(Permission.WRITE)
         }
@@ -90,7 +90,7 @@ class DefaultResourceService(
         val canWrite = checkCanWrite(resourceId, userId).toString().contains(Permission.WRITE.toString())
         if (canWrite) {
             println("Authorized to delete\n deleting ...")
-            println("resourceId: $resourceId")
+            println("outsideResourceId: $resourceId")
             val resource =
                 repository
                     .findByResourceId(
@@ -103,10 +103,10 @@ class DefaultResourceService(
         }
     }
 
-    private fun createResource(addResource: AddResource): ResourceUserPermission {
-        println("ResourceId: ${addResource.resourceId}, userId: ${addResource.userId}")
-        userService.findOrCreate(addResource.userId)
-        val resource = repository.save(Resource(addResource))
-        return ResourceUserPermission(resource.resourceId, resource.permissions)
+    private fun createResource(resourcePermissionCreateDTO: ResourcePermissionCreateDTO): PermissionResponse {
+        println("ResourceId: ${resourcePermissionCreateDTO.resourceId}, userId: ${resourcePermissionCreateDTO.userId}")
+        userService.findOrCreate(resourcePermissionCreateDTO.userId)
+        val resource = repository.save(Resource(resourcePermissionCreateDTO))
+        return PermissionResponse(resource.outsideResourceId, resource.permissions)
     }
 }
