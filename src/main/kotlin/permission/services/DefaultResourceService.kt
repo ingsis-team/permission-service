@@ -29,7 +29,7 @@ class DefaultResourceService(
     override fun findUserResources(id: String): List<PermissionResponse> {
         val returnableResources = mutableListOf<PermissionResponse>()
         repository.findAllByUsersId(id).map {
-            returnableResources.add(PermissionResponse(it.outsideResourceId, it.permissions))
+            returnableResources.add(PermissionResponse(it.resourceId, it.permissions))
         }
         return returnableResources
     }
@@ -90,7 +90,7 @@ class DefaultResourceService(
         val canWrite = checkCanWrite(resourceId, userId).toString().contains(Permission.WRITE.toString())
         if (canWrite) {
             println("Authorized to delete\n deleting ...")
-            println("outsideResourceId: $resourceId")
+            println("resourceId: $resourceId")
             val resource =
                 repository
                     .findByResourceId(
@@ -107,6 +107,6 @@ class DefaultResourceService(
         println("ResourceId: ${resourcePermissionCreateDTO.resourceId}, userId: ${resourcePermissionCreateDTO.userId}")
         userService.findOrCreate(resourcePermissionCreateDTO.userId)
         val resource = repository.save(Resource(resourcePermissionCreateDTO))
-        return PermissionResponse(resource.outsideResourceId, resource.permissions)
+        return PermissionResponse(resource.resourceId, resource.permissions)
     }
 }

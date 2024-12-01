@@ -66,7 +66,7 @@ class ResourceController(
     @GetMapping("/user-resource")
     fun getSpecificPermission(
         @CookieValue("userId") userId: String,
-        @CookieValue("outsideResourceId") resourceId: String,
+        @CookieValue("resourceId") resourceId: String,
     ): ResponseEntity<PermissionResponse> = ResponseEntity(service.findByUsersIdAndResourceId(userId, resourceId), HttpStatus.OK)
 
     @PostMapping("/share-resource")
@@ -80,7 +80,7 @@ class ResourceController(
     @GetMapping("/can-write")
     fun checkCanWrite(
         @CookieValue("userId") userId: String,
-        @CookieValue("outsideResourceId") resourceId: String,
+        @CookieValue("resourceId") resourceId: String,
     ): ResponseEntity<ResourceUser> {
         val response = service.checkCanWrite(resourceId, userId)
         return ResponseEntity(response, HttpStatus.OK)
@@ -99,7 +99,7 @@ class ResourceController(
         @CookieValue("userId") userId: String,
         @PathVariable("resourceId") resourceId: String,
     ): ResponseEntity<String> {
-        println("userId: $userId, outsideResourceId: $resourceId")
+        println("userId: $userId, resourceId: $resourceId")
         service.deleteResource(userId, resourceId)
         return ResponseEntity("Deleted Successfully", HttpStatus.OK)
     }
