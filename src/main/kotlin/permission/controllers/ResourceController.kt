@@ -82,6 +82,7 @@ class ResourceController(
         @CookieValue("userId") userId: String,
         @CookieValue("resourceId") resourceId: String,
     ): ResponseEntity<ResourceUser> {
+        logger.info("Received userId: $userId, resourceId: $resourceId")
         val response = service.checkCanWrite(resourceId, userId)
         return ResponseEntity(response, HttpStatus.OK)
     }
