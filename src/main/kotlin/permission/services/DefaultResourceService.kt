@@ -1,5 +1,6 @@
 package permission.services
 
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -21,6 +22,8 @@ class DefaultResourceService(
     @Autowired
     private val userService: UserService,
 ) : ResourceService {
+    private val logger = LoggerFactory.getLogger(DefaultResourceService::class.java)
+
     override fun addResource(resourcePermissionCreateDTO: ResourcePermissionCreateDTO): PermissionResponse {
         resourcePermissionCreateDTO.permissions.add(Permission.OWNER)
         return createResource(resourcePermissionCreateDTO)
@@ -74,8 +77,15 @@ class DefaultResourceService(
             getAllWriteableResources(userId).filter {
                 it.resourceId == resourceId
             }
-        if (resources.isEmpty()) throw PermissionException("User doesn't have that resource available", HttpStatus.UNAUTHORIZED)
-        return ResourceUser(userId, resources[0].permissions.toList())
+        logger.info("ResourceUser details: $resources")
+        if (resources.isEmpty()) {
+            logger.info("User $userId does not have permission to modify resource $resourceId ")
+            throw PermissionException("User doesn't have that resource available", HttpStatus.UNAUTHORIZED)
+        }
+        logger.info("User $userId has permission to modify resource $resourceId")
+        val resourceUser = ResourceUser(userId, resources[0].permissions.toList())
+        logger.info("Returning ResourceUser: $resourceUser")
+        return resourceUser
     }
 
     override fun getAllWriteableResources(userId: String): List<PermissionResponse> =
