@@ -1,0 +1,3 @@
+package permission.services
+
+class DefaultResourceServiceTests
