@@ -34,6 +34,7 @@ class FiltersTests {
     fun setUp() {
         MDC.clear()
     }
+
 /*
     @Test
     fun testCorrelationIdFilter() {
